@@ -19,14 +19,16 @@ public class UserDao {
 
     @SneakyThrows
     public void save(User user) {
-
-//        objectMapper.writeValue(file, user);
-
-        List<User> list = objectMapper.readValue(file, new TypeReference<List<User>>() {
-        });
+        List<User> list = findAll();
 
         list.add(user);
-
         objectMapper.writeValue(file, list);
     }
+
+    @SneakyThrows
+    public List<User> findAll() {
+        return objectMapper.readValue(file, new TypeReference<List<User>>() {
+        });
+    }
+
 }

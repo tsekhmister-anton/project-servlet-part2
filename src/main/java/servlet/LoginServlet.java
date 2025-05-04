@@ -11,30 +11,39 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import service.UserService;
 
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Optional;
 
-@WebServlet(urlPatterns = "/registration")
-public class RegistrationServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/login")
+public class LoginServlet extends HttpServlet {
 
     private UserService userService;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config); // не удалять
         userService = (UserService) config.getServletContext().getAttribute("userService");
+        passwordEncoder = (BCryptPasswordEncoder) config.getServletContext().getAttribute("passwordEncoder");
 
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/registration.html").forward(req, resp);
+        req.getRequestDispatcher("/login.html").forward(req, resp);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
-        userService.save(login, password);
+        Optional<User> optionalUser = userService.findUserByCredentials(login, password);
+
+        if (optionalUser.isPresent()) {
+            req.getRequestDispatcher("/index.html").forward(req, resp);
+        } else {
+            req.getRequestDispatcher("/login.html").forward(req, resp);
+        }
     }
 }
