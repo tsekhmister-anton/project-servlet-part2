@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import service.UserService;
 
 import java.io.IOException;
@@ -16,11 +17,13 @@ import java.util.UUID;
 public class RegistrationServlet extends HttpServlet {
 
     private UserService userService;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config); // не удалять
         userService = (UserService) config.getServletContext().getAttribute("userService");
+        passwordEncoder = (BCryptPasswordEncoder) config.getServletContext().getAttribute("passwordEncoder");
 
     }
 
@@ -34,10 +37,11 @@ public class RegistrationServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
+        String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder()
                 .id(UUID.randomUUID())
                 .login(login)
-                .password(password)
+                .password(encodedPassword)
                 .build();
 
         userService.save(user);
