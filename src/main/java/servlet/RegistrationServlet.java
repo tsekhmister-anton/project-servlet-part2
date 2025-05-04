@@ -1,6 +1,7 @@
 package servlet;
 
 import entity.User;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +16,13 @@ import java.util.UUID;
 public class RegistrationServlet extends HttpServlet {
 
     private UserService userService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); // не удалять
+        userService = (UserService) config.getServletContext().getAttribute("userService");
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
