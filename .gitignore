@@ -6,3 +6,6 @@
 /jarRepositories.xml
 /misc.xml
 /vcs.xml
+/src/main/webapp/WEB-INF/web.xml
+/.mvn/wrapper/maven-wrapper.jar
+/.mvn/wrapper/maven-wrapper.properties
