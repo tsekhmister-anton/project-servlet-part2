@@ -36,5 +36,6 @@ public class RegistrationServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         userService.save(login, password);
+        resp.sendRedirect("/login");
     }
 }

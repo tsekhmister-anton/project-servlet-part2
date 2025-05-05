@@ -6,8 +6,19 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Products</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-
+<form action="/secure/products" method="post">
+    <fieldset>
+        <div><label>
+            Name: <input type="text" name="product-name">
+        </label></div>
+        <div><label>
+            ImageUrl: <input type="text" name="image-url">
+        </label></div>
+        <button type="submit">Add product</button>
+    </fieldset>
+</form>
 </body>
 </html>
