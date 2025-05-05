@@ -38,7 +38,8 @@ public class LoginServlet extends HttpServlet {
         Optional<User> optionalUser = userService.findUserByCredentials(login, password);
 
         if (optionalUser.isPresent()) {
-            req.getRequestDispatcher("/index.html").forward(req, resp);
+            req.getSession().setAttribute("user", optionalUser.get());
+            req.getRequestDispatcher("/secure/products.html").forward(req, resp);
         } else {
             req.getRequestDispatcher("/login.html").forward(req, resp);
         }
