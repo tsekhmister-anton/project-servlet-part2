@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
 
         if (optionalUser.isPresent()) {
             req.getSession().setAttribute("user", optionalUser.get());
-            req.getRequestDispatcher("/secure/products.html").forward(req, resp);
+            req.getRequestDispatcher("/secure/products").forward(req, resp);
         } else {
             req.getRequestDispatcher("/login.html").forward(req, resp);
         }

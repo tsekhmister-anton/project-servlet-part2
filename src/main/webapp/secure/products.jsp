@@ -1,3 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,5 +22,10 @@
         <button type="submit">Add product</button>
     </fieldset>
 </form>
+
+<c:forEach var="product" items="${products}">
+    <p>${product.name}</p>
+    <img src="${product.imageUrl}">
+</c:forEach>
 </body>
 </html>
