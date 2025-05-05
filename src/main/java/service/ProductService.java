@@ -22,6 +22,11 @@ public class ProductService {
         return productDao.findAll().stream()
                 .filter(product -> product.getUserId().equals(userId))
                 .toList();
+    }
 
+    public void removeById(UUID productId) {
+        List<Product> products = productDao.findAll();
+        List<Product> productsWithoutDeletedElement = products.stream().filter(product -> !product.getId().equals(productId)).toList();
+        productDao.saveAll(productsWithoutDeletedElement);
     }
 }

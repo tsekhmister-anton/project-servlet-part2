@@ -14,10 +14,10 @@
 <form action="/secure/products" method="post">
     <fieldset>
         <div><label>
-            Name: <input type="text" name="product-name">
+            Name: <input type="text" name="product-name" required>
         </label></div>
         <div><label>
-            ImageUrl: <input type="text" name="image-url">
+            ImageUrl: <input type="text" name="image-url" required>
         </label></div>
         <button type="submit">Add product</button>
     </fieldset>
@@ -25,7 +25,12 @@
 
 <c:forEach var="product" items="${products}">
     <p>${product.name}</p>
-    <img src="${product.imageUrl}">
+    <img src="${product.imageUrl}" alt="Image not found">
+    <form action="/secure/products" method="post">
+        <input type="hidden" name="_method" value="DELETE"/>
+        <input type="hidden" name="product-id" value="${product.id}"/>
+        <button type="submit" name="remove-button" style="color: red">Remove</button>
+    </form>
 </c:forEach>
 </body>
 </html>

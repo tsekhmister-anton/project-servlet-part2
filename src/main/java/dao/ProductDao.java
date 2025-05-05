@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ProductDao {
@@ -20,6 +21,11 @@ public class ProductDao {
         List<Product> list = findAll();
         list.add(product);
         objectMapper.writeValue(file, list);
+    }
+
+    @SneakyThrows
+    public void saveAll(List<Product> products) {
+        objectMapper.writeValue(file, products);
     }
 
     @SneakyThrows

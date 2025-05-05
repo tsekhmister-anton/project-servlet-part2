@@ -53,4 +53,12 @@ public class ProductsServlet extends HttpServlet {
         resp.sendRedirect("/secure/products");
 
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String productId = req.getParameter("product-id");
+        productService.removeById(UUID.fromString(productId));
+        resp.sendRedirect("/secure/products");
+
+    }
 }
