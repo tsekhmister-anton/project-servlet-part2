@@ -23,7 +23,7 @@
     </fieldset>
 </form>
 
-<c:forEach var="product" items="${products}">
+<c:forEach var="product" items="${products}">    
     <p>${product.name}</p>
     <img src="${product.imageUrl}" alt="Image not found">
     <form action="/secure/products" method="post">
