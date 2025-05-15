@@ -23,9 +23,21 @@
     </fieldset>
 </form>
 
-<c:forEach var="product" items="${products}">    
+<div>
+    <c:forEach var="login" items="${userLogins}">
+        <p> ${login}</p>
+    </c:forEach>
+</div>
+<c:forEach var="product" items="${products}">
     <p>${product.name}</p>
-    <img src="${product.imageUrl}" alt="Image not found">
+    <c:choose>
+        <c:when test="${product.imageUrl != null}">
+            <img src="${product.imageUrl}">
+        </c:when>
+        <c:otherwise>
+            <img src="Https://cdn-icons-png.flaticon.com/512/4054/4054617.png">
+        </c:otherwise>
+    </c:choose>
     <form action="/secure/products" method="post">
         <input type="hidden" name="_method" value="DELETE"/>
         <input type="hidden" name="product-id" value="${product.id}"/>

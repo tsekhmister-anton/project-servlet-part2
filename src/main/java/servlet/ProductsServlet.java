@@ -12,13 +12,18 @@ import service.ProductService;
 import service.UserService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @WebServlet(urlPatterns = "/secure/products")
 public class ProductsServlet extends HttpServlet {
 
     private ProductService productService;
+    public static List<String> onlineUsersSet = new ArrayList<>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -32,6 +37,7 @@ public class ProductsServlet extends HttpServlet {
         User user = (User) req.getSession().getAttribute("user");
         List<Product> userProducts = productService.findAllByUserId(user.getId());
         req.setAttribute("products", userProducts);
+        req.setAttribute("userLogins", onlineUsersSet);
         req.getRequestDispatcher("/secure/products.jsp").forward(req, resp);
     }
 

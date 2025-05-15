@@ -16,12 +16,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static servlet.ProductsServlet.onlineUsersSet;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
     private UserService userService;
-    private final Map<String, LoginAttempt> loginAttempts = new HashMap<>();
+    private final Map<String, LoginAttempt> loginAttempts = new ConcurrentHashMap<>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -41,17 +45,17 @@ public class LoginServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
 
-        String sessionId = req.getRequestedSessionId();
-        loginAttempts.putIfAbsent(sessionId, new LoginAttempt());
-        LoginAttempt attempt = loginAttempts.get(sessionId);
-        if (attempt.isBlocked()) {
-            resp.sendError(429, "Login attempt exceeded");
-            return;
-        }
+        loginAttempts.putIfAbsent(login, new LoginAttempt());
+        LoginAttempt attempt = loginAttempts.get(login);
 
         if (attempt.isBlockedExpired()) {
-            attempt.setCountOfAttempts(0);
+            attempt.setCountOfAttempts(new AtomicInteger(0));
 
+        }
+
+        if (attempt.isBlocked()) {
+            resp.sendError(429);
+            return;
         }
 
 
@@ -59,8 +63,10 @@ public class LoginServlet extends HttpServlet {
 
 
         if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             req.getSession().setAttribute("user", optionalUser.get());
-            req.getRequestDispatcher("/secure/products").forward(req, resp);
+            onlineUsersSet.add(user.getLogin());
+            resp.sendRedirect("/secure/products");
         } else {
             attempt.incrementAttempts();
             resp.sendRedirect("/login");
